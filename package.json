@@ -11,6 +11,7 @@
   },
   "keywords": [],
   "author": "Jeff Horton <jeff@goblinoid.co.uk>",
+  "repository": "https://github.com/kamioftea/cdk-common.git",
   "license": "ISC",
   "dependencies": {
     "@aws-sdk/client-cognito-identity-provider": "^3.623.0",
@@ -40,5 +41,8 @@
     "ts-jest": "^29.2.4",
     "ts-node": "^10.9.2",
     "typescript": "^5.5.4"
+  },
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com"
   }
 }

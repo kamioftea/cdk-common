@@ -148,20 +148,21 @@ export class AuthNestedStack extends NestedStack {
                 COGNITO_USER_POOL_ID: userPool.userPoolId,
                 COGNITO_CLIENT_ID: userPoolClient.userPoolClientId,
             },
-            depsLockFilePath: join(__dirname, '..', 'package-lock.json'),
             runtime: Runtime.NODEJS_20_X,
             tracing: Tracing.ACTIVE,
         }
 
         const authApiHandler = new NodejsFunction(this, `${id}AuthApiHandler`, {
-            entry: join(__dirname, '..', 'lambdas', 'authHandler.ts'),
+            entry: join(__dirname, '..', 'lambdas', 'authHandler.js'),
             ...lambdaDefaults,
         })
+
+        console.log(__dirname);
 
         this.authApiIntegration = new HttpLambdaIntegration(`${id}AuthApiIntegration`, authApiHandler);
 
         const adminAuthApiHandler = new NodejsFunction(this, `${id}AdminAuthApiHandler`, {
-            entry: join(__dirname, '..', 'lambdas', 'adminAuthHandler.ts'),
+            entry: join(__dirname, '..', 'lambdas', 'adminAuthHandler.js'),
             ...lambdaDefaults,
         })
 
@@ -177,7 +178,7 @@ export class AuthNestedStack extends NestedStack {
         this.adminAuthApiIntegration = new HttpLambdaIntegration(`${id}AdminAuthApiIntegration`, adminAuthApiHandler);
 
         const createAdminUserFunction = new NodejsFunction(this, `${id}CreateAdminUserFunction`, {
-            entry: join(__dirname, '..', 'lambdas', 'deploy', 'createAdminUser.ts'),
+            entry: join(__dirname, '..', 'lambdas', 'deploy', 'createAdminUser.js'),
             ...lambdaDefaults,
             environment: {
                 ...lambdaDefaults.environment,
@@ -201,6 +202,7 @@ export class AuthNestedStack extends NestedStack {
         });
     }
 
+    // noinspection JSUnusedGlobalSymbols
     public registerAuthApiRoutes(api: HttpApi, prefix = '') {
         api.addRoutes(
             {
