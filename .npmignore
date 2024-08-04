@@ -1,0 +1,13 @@
+*.ts
+!*.d.ts
+
+# CDK asset staging directory
+.cdk.staging
+cdk.out
+
+/.idea/
+/cdk-common.iml
+
+.eslintrc.cjs
+*jest*
+tsconfig.son
