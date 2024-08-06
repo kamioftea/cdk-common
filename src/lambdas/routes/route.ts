@@ -12,7 +12,7 @@ export interface RouteContext {
 }
 
 export interface Route<T = never> {
-    handle: (event: APIGatewayProxyEventV2, context: RouteContext) => Promise<APIGatewayProxyResultV2<T>>;
+    handler: (event: APIGatewayProxyEventV2, context: RouteContext) => Promise<APIGatewayProxyResultV2<T>>;
     method: "GET" | "POST" | "PUT" | "DELETE";
     action: string;
 }
@@ -46,5 +46,5 @@ export async function routeEvent(
     invariant(name, 'route name defined if route is')
     context?.segment?.addAnnotation('route', name);
 
-    return await route.handle(event, context);
+    return await route.handler(event, context);
 }

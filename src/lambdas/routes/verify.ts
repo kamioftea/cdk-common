@@ -18,7 +18,7 @@ function validateVerificationRequest(input: unknown): VerificationRequest {
     return schema.parse(input);
 }
 
-const handler: Route["handle"] =
+const handler: Route["handler"] =
     async (event, {client, clientId}) => {
         const {email, verification_code} = parseBody(event, validateVerificationRequest);
 
@@ -40,7 +40,7 @@ const handler: Route["handle"] =
     }
 
 export const verifyRoute: Route = {
-    handle: handler,
+    handler,
     method: 'POST',
     action: 'verify'
 }

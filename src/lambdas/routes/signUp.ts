@@ -20,7 +20,7 @@ function validateSignUpRequest(input: unknown): SignUpRequest {
     return schema.parse(input);
 }
 
-const handler: Route["handle"] =
+const handler: Route["handler"] =
     async (event, {client, clientId}) => {
         const {email, name, password} = parseBody(event, validateSignUpRequest);
 
@@ -53,7 +53,7 @@ const handler: Route["handle"] =
     }
 
 export const signUpRoute: Route = {
-    handle: handler,
+    handler,
     method: 'POST',
     action: 'sign-up'
 }

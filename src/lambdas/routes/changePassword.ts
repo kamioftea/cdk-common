@@ -18,7 +18,7 @@ function validateChangePasswordRequest(input: unknown): ChangePasswordRequest {
     return schema.parse(input);
 }
 
-const handler: Route["handle"] =
+const handler: Route["handler"] =
     async (event, {client}) => {
         const {previousPassword, proposedPassword} = parseBody(event, validateChangePasswordRequest);
 
@@ -41,7 +41,7 @@ const handler: Route["handle"] =
     }
 
 export const changePasswordRoute: Route = {
-    handle: handler,
+    handler,
     method: 'POST',
     action: 'change-password'
 }

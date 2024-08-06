@@ -19,7 +19,7 @@ function validateResetPasswordRequest(input: unknown): ResetPasswordRequest {
     return schema.parse(input);
 }
 
-const handler: Route["handle"] =
+const handler: Route["handler"] =
     async (event, {client, clientId}) => {
         const {email, verification_code, password} = parseBody(event, validateResetPasswordRequest);
         await client.send(new ConfirmForgotPasswordCommand(
@@ -41,7 +41,7 @@ const handler: Route["handle"] =
     }
 
 export const resetPasswordRoute: Route = {
-    handle: handler,
+    handler,
     method: 'POST',
     action: 'reset-password'
 }

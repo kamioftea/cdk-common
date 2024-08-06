@@ -3,7 +3,7 @@ import {RevokeTokenCommand} from "@aws-sdk/client-cognito-identity-provider";
 import {getAccessToken} from "../utils/tokenUtils";
 import {COOKIE_PATH} from "../utils/tokenUtils";
 
-export const handler: Route["handle"] =
+export const handler: Route["handler"] =
     async (event, {client, clientId}) => {
         const maybeToken = getAccessToken(event, false);
         if (maybeToken) {
@@ -19,7 +19,7 @@ export const handler: Route["handle"] =
     }
 
 export const logoutRoute: Route = {
-    handle: handler,
+    handler,
     method: 'POST',
     action: 'logout'
 }

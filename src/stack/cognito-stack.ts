@@ -23,6 +23,7 @@ export interface AuthNestedStackProps extends StackProps {
     emailVerificationConfig?: UserVerificationConfig;
     adminEmail: string;
     adminPassword: string;
+    lambdaDefaults: NodejsFunctionProps
 }
 
 export class AuthNestedStack extends NestedStack {
@@ -150,14 +151,13 @@ export class AuthNestedStack extends NestedStack {
             },
             runtime: Runtime.NODEJS_20_X,
             tracing: Tracing.ACTIVE,
+            ...props.lambdaDefaults
         }
 
         const authApiHandler = new NodejsFunction(this, `${id}AuthApiHandler`, {
             entry: join(__dirname, '..', 'lambdas', 'authHandler.js'),
             ...lambdaDefaults,
         })
-
-        console.log(__dirname);
 
         this.authApiIntegration = new HttpLambdaIntegration(`${id}AuthApiIntegration`, authApiHandler);
 

@@ -20,7 +20,7 @@ function validateGetUserResponse(input: unknown): GetUserResponse {
     return schema.parse(input);
 }
 
-const handler: Route<GetUserResponse>["handle"] =
+const handler: Route<GetUserResponse>["handler"] =
     async (event, {client}) => {
         try {
             const accessToken = getAccessToken(event);
@@ -43,7 +43,7 @@ const handler: Route<GetUserResponse>["handle"] =
     }
 
 export const getUserRoute: Route<GetUserResponse> = {
-    handle: handler,
+    handler,
     method: "GET",
     action: "/",
 }

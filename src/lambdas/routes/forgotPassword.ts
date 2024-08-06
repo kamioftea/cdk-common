@@ -15,7 +15,7 @@ function validateForgotPasswordRequest(input: unknown): ForgotPasswordRequest {
     return schema.parse(input);
 }
 
-const handler: Route["handle"] =
+const handler: Route["handler"] =
     async (event, {client, clientId}) => {
         const {email} = parseBody(event, validateForgotPasswordRequest);
 
@@ -38,7 +38,7 @@ const handler: Route["handle"] =
     }
 
 export const forgotPasswordRoute: Route = {
-    handle: handler,
+    handler,
     method: 'POST',
     action: 'forgot-password'
 }

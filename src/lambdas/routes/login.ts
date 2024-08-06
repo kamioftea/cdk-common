@@ -19,7 +19,7 @@ function validateLoginRequest(input: unknown): LoginRequest {
     return schema.parse(input);
 }
 
-export const handler: Route["handle"] =
+export const handler: Route["handler"] =
     async (event, {client, clientId, segment}) => {
         try {
             const {email, password} = parseBody(event, validateLoginRequest);
@@ -72,7 +72,7 @@ export const handler: Route["handle"] =
     }
 
     export const loginRoute: Route = {
-        handle: handler,
+        handler,
         method: 'POST',
         action: 'login'
     }

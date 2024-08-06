@@ -3,7 +3,7 @@ import {Route} from "./route";
 import {assertUserGroup} from "../utils/tokenUtils";
 import {ErrorResponse} from "../utils/errorResponse";
 
-const handler: Route["handle"] =
+const handler: Route["handler"] =
     async (event, {client, userPoolId}) => {
         await assertUserGroup(event, 'admin');
 
@@ -30,7 +30,7 @@ const handler: Route["handle"] =
     }
 
 export const adminVerifyUserRoute: Route = {
-    handle: handler,
+    handler,
     method: "POST",
     action: "verify",
 }
