@@ -7,6 +7,7 @@ import {
     UserPool,
     UserPoolClient,
     UserPoolClientIdentityProvider,
+    UserPoolOperation,
     UserVerificationConfig,
     VerificationEmailStyle
 } from "aws-cdk-lib/aws-cognito";
@@ -17,6 +18,7 @@ import {Runtime, Tracing} from "aws-cdk-lib/aws-lambda";
 import {HttpLambdaIntegration} from "aws-cdk-lib/aws-apigatewayv2-integrations";
 import {HttpApi, HttpMethod} from "aws-cdk-lib/aws-apigatewayv2";
 import {InvocationType, Trigger} from "aws-cdk-lib/triggers";
+import {Effect, PolicyStatement} from "aws-cdk-lib/aws-iam";
 
 export interface AuthNestedStackProps extends StackProps {
     appName: string;
@@ -200,6 +202,29 @@ export class AuthNestedStack extends NestedStack {
             invocationType: InvocationType.EVENT,
             executeOnHandlerChange: true,
         });
+
+        const onConfirmationHandler = new NodejsFunction(this, `${id}CardBuilderOnConfirmationHandler`, {
+            entry: join(__dirname, '..', '..', 'lambdas', 'onConfirmation.ts'),
+            ...lambdaDefaults,
+            environment: {ADMIN_EMAIL: props.adminEmail, APPLICATION_NAME: props.appName}
+        })
+
+        onConfirmationHandler.addToRolePolicy(
+            new PolicyStatement(
+                {
+                    effect: Effect.ALLOW,
+                    actions: [
+                        'ses:SendEmail',
+                        'ses:SendRawEmail',
+                    ],
+                    resources: [
+                        `arn:aws:ses:${region}:${account}:identity/${props.adminEmail}`,
+                    ],
+                }
+            ),
+        );
+
+        userPool.addTrigger(UserPoolOperation.POST_CONFIRMATION, onConfirmationHandler);
     }
 
     // noinspection JSUnusedGlobalSymbols

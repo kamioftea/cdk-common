@@ -4,6 +4,7 @@ import * as AWSXRay from "aws-xray-sdk";
 import {Handler, PostConfirmationConfirmSignUpTriggerEvent} from "aws-lambda";
 
 const ADMIN_EMAIL = process.env.ADMIN_EMAIL || '';
+const APPLICATION_NAME = process.env.APPLICATION_NAME || 'AWS Cognito'
 
 const ses = new SES();
 
@@ -18,7 +19,7 @@ export const handler: Handler<PostConfirmationConfirmSignUpTriggerEvent, PostCon
                 },
                 Message: {
                     Subject: {
-                        Data: "A new user has signed up to card builder."
+                        Data: `A new user has signed up to ${APPLICATION_NAME}.`
                     },
                     Body: {
                         Text: {
