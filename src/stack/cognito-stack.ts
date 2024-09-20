@@ -32,6 +32,9 @@ export class AuthNestedStack extends NestedStack {
     private readonly authApiIntegration: HttpLambdaIntegration;
     private readonly adminAuthApiIntegration: HttpLambdaIntegration;
 
+    public readonly userPoolId: string;
+    public readonly userPoolClientId: string;
+
     constructor(scope: Construct, id: string, props: AuthNestedStackProps) {
         super(scope, id, props);
         const appName = props?.appName ?? 'aws application';
@@ -85,6 +88,8 @@ export class AuthNestedStack extends NestedStack {
         new CfnOutput(this, 'UserPoolId', {value: userPool.userPoolId});
         new CfnOutput(this, 'UserPoolProviderUrl', {value: userPool.userPoolProviderUrl});
 
+        this.userPoolId = userPool.userPoolId;
+
         const cfnUserPool = userPool.node.defaultChild as CfnUserPool;
         cfnUserPool.emailConfiguration = {
             emailSendingAccount: 'DEVELOPER',
@@ -133,6 +138,7 @@ export class AuthNestedStack extends NestedStack {
         });
 
         new CfnOutput(this, 'UserPoolClient', {value: userPoolClient.userPoolClientId});
+        this.userPoolClientId = userPoolClient.userPoolClientId;
 
         const lambdaDefaults: NodejsFunctionProps = {
             bundling: {
@@ -204,7 +210,7 @@ export class AuthNestedStack extends NestedStack {
         });
 
         const onConfirmationHandler = new NodejsFunction(this, `${id}CardBuilderOnConfirmationHandler`, {
-            entry: join(__dirname, '..', '..', 'lambdas', 'onConfirmation.ts'),
+            entry: join(__dirname, '..', 'lambdas', 'onConfirmation.js'),
             ...lambdaDefaults,
             environment: {ADMIN_EMAIL: props.adminEmail, APPLICATION_NAME: props.appName}
         })
